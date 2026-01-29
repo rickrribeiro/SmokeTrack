@@ -36,7 +36,7 @@ const App: React.FC = () => {
     newData.smokingTypes = Array.from(new Set([...newData.smokingTypes, ...importedData.smokingTypes || []]));
     newData.activities = Array.from(new Set([...newData.activities, ...importedData.activities || []]));
     setData(newData);
-  }, []);
+  }, [data]);
 
   const updateLists = useCallback((types: string[], activities: string[]) => {
     setData(prev => ({
