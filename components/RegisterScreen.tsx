@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { SmokingRecord } from '../types';
-import { Trash2, PlusCircle, Clock, Calendar } from 'lucide-react';
+import { Trash2, PlusCircle, Clock } from 'lucide-react';
 import Modal from './Modal';
 
 interface RegisterScreenProps {

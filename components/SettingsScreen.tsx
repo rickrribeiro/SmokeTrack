@@ -34,7 +34,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
   };
 
   const handleImport = () => {
-    const validated = storageService.validateAndImport(importJson);
+    const validated = storageService.validateImportedData(importJson);
     if (validated) {
       onImport(validated);
       setFeedback({ type: 'success', msg: 'Dados importados com sucesso!' });
