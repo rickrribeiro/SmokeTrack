@@ -30,11 +30,12 @@ const App: React.FC = () => {
     }));
   }, []);
 
-  const importData = useCallback((newData: AppData) => {
-    data.records = data.records.concat(newData.records || []);
-    data.smokingTypes = Array.from(new Set([...data.smokingTypes, ...newData.smokingTypes || []]));
-    data.activities = Array.from(new Set([...data.activities, ...newData.activities || []]));
-    setData(data);
+  const importData = useCallback((importedData: AppData) => {
+    const newData: AppData = { ...data };
+    newData.records = newData.records.concat(importedData.records || []);
+    newData.smokingTypes = Array.from(new Set([...newData.smokingTypes, ...importedData.smokingTypes || []]));
+    newData.activities = Array.from(new Set([...newData.activities, ...importedData.activities || []]));
+    setData(newData);
   }, []);
 
   const updateLists = useCallback((types: string[], activities: string[]) => {
