@@ -31,7 +31,10 @@ const App: React.FC = () => {
   }, []);
 
   const importData = useCallback((newData: AppData) => {
-    setData(newData);
+    data.records = data.records.concat(newData.records || []);
+    data.smokingTypes = Array.from(new Set([...data.smokingTypes, ...newData.smokingTypes || []]));
+    data.activities = Array.from(new Set([...data.activities, ...newData.activities || []]));
+    setData(data);
   }, []);
 
   const updateLists = useCallback((types: string[], activities: string[]) => {
@@ -50,7 +53,7 @@ const App: React.FC = () => {
         </div>
         <div>
           <h1 className="text-xl font-black text-slate-800 tracking-tight leading-none uppercase">SmokeTrack</h1>
-          <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-tighter">Bahia 2 a 1 boraaa</p>
+          <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-tighter">Total até agora: {data.records.length}</p>
         </div>
       </header>
 

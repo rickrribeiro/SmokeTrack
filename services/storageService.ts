@@ -33,9 +33,9 @@ export const storageService = {
       const data = JSON.parse(jsonString);
       if (
         data &&
-        Array.isArray(data.records) &&
-        Array.isArray(data.smokingTypes) &&
-        Array.isArray(data.activities)
+        (data.records && Array.isArray(data.records)) ||
+        (data.smokingTypes && Array.isArray(data.smokingTypes)) ||
+        (data.activities && Array.isArray(data.activities))
       ) {
         return data as AppData;
       }
