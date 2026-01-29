@@ -1,2 +1,6 @@
-# SmokeTrack
-app to help people to kit smoking
+**Pre requisites:**  Node.js
+
+1. Install dependencies:
+   `npm install`
+2. Run the app:
+   `npm run dev`

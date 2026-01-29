@@ -1,0 +1,5 @@
+{
+  "name": "SmokeTrack",
+  "description": "Aplicativo para registro e análise detalhada de hábitos de fumar com gráficos estatísticos e exportação de dados.",
+  "requestFramePermissions": []
+}
