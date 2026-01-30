@@ -10,3 +10,9 @@
 `npx cap add ios`
 `npx cap copy`
 `npx cap open ios`
+
+
+
+Todo:
+- in analytics add filter to weekdays or weekend
+- add daily average

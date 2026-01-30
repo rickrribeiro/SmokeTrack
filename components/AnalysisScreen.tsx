@@ -7,7 +7,6 @@ import {
   BarChart, Bar, Cell
 } from 'recharts';
 import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 interface AnalysisScreenProps {
   records: SmokingRecord[];
@@ -74,6 +73,23 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
     return Object.keys(map).map(name => ({ name, count: map[name] })).sort((a,b) => b.count - a.count);
   }, [filteredRecords]);
 
+  // const averageData = useMemo(() => {
+  //   const totalDays = periodo === FilterRange.TOTAL ? Math.max(1, Math.ceil((new Date().getTime() - new Date(records[0]?.dateTime || new Date()).getTime()) / (1000 * 60 * 60 * 24))) : parseInt(periodo.split(' ')[0]);
+  //   const average = filteredRecords.length / totalDays;
+  //   return average.toFixed(2);
+  // }, [filteredRecords, periodo, records]);
+
+  const averageDataWhithoutToday = useMemo(() => {
+    const totalDays = periodo === FilterRange.TOTAL ? Math.max(1, Math.ceil((new Date().getTime() - new Date(records[0]?.dateTime || new Date()).getTime()) / (1000 * 60 * 60 * 24))) - 1 : parseInt(periodo.split(' ')[0]) - 1;
+    const recordsWithoutToday = filteredRecords.filter(r => {
+      const recordDate = new Date(r.dateTime).toDateString();
+      const today = new Date().toDateString();
+      return recordDate !== today;
+    });
+    const average = recordsWithoutToday.length / totalDays;
+    return average.toFixed(2);
+  }, [filteredRecords, periodo, records]);
+
   const COLORS = ['#6366f1', '#818cf8', '#a5b4fc', '#c7d2fe', '#e0e7ff'];
 
   return (
@@ -90,6 +106,11 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
       </section>
 
       <div className="space-y-6">
+        <ChartCard title="Média Diária ( sem hoje )" >
+          <div className="text-3xl font-bold text-slate-800">
+            { averageDataWhithoutToday }
+          </div>
+        </ChartCard>
         <ChartCard title="Fumo por Dia">
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={dailyData}>

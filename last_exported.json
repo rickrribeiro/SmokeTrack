@@ -1,0 +1,151 @@
+{
+  "records": [
+    {
+      "smokeType": "Tabaco",
+      "activity": "Reunião Velt",
+      "dateTime": "2026-01-28T13:00:00.000Z",
+      "id": "385fb392-ee8c-45b2-8261-2efaeaa3ee10"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Reunião Velt",
+      "dateTime": "2026-01-28T14:00:00.000Z",
+      "id": "2fca6246-8d83-4f21-8b8e-9d0398e2a1fe"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Reunião Velt",
+      "dateTime": "2026-01-28T15:30:00.000Z",
+      "id": "610a4fea-85de-4df7-a4aa-95f5d6be5292"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-28T16:00:00.000Z",
+      "id": "7d17206b-0a5e-4ddf-bd63-980813dd6199"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-28T17:30:00.000Z",
+      "id": "912695a9-9594-4ea7-adac-4f88744182e9"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-28T19:00:00.000Z",
+      "id": "cf6741c9-2be1-4210-8175-9d1c867c3d78"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-28T20:00:00.000Z",
+      "id": "8bf5a372-6378-4c1b-a5ea-af6890017d52"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-28T22:00:00.000Z",
+      "id": "ae6c5109-fab1-4547-a6cf-2de59470302c"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Jogando LoL",
+      "dateTime": "2026-01-29T00:00:00.000Z",
+      "id": "aa44ed9c-b58a-47ba-8f5c-9d8ae3e19c4f"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Jogando LoL",
+      "dateTime": "2026-01-29T01:00:00.000Z",
+      "id": "14864f17-155e-4153-b0b9-7f5b17ed6c19"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-29T13:00:00.000Z",
+      "id": "3ea995a2-4d6f-423f-a81c-c422a0d1c361"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-29T14:00:00.000Z",
+      "id": "68e7b011-c05e-440c-a1d0-cc9d2175169d"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-29T15:00:00.000Z",
+      "id": "466768cd-d697-4b76-9351-a8deb90f533a"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-29T16:00:00.000Z",
+      "id": "68913b59-fb70-4115-9d86-dcb8f023680b"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Reunião Trabalho",
+      "dateTime": "2026-01-29T17:00:00.000Z",
+      "id": "6583886f-dadb-4c62-8d9f-da4a917cae35"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-29T18:00:00.000Z",
+      "id": "a82b49cf-0240-4153-8d3e-fa2f5f9e2d73"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-29T19:00:00.000Z",
+      "id": "9ab9877b-594b-44f1-8dad-c7322512b442"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-29T20:00:00.000Z",
+      "id": "cf143b8d-375d-4121-a703-e2ce1ec909ee"
+    },
+    {
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-29T21:00:00.000Z",
+      "id": "2b651e02-aff6-4fde-a374-7513ad4e0653"
+    },
+    {
+      "id": "f49ab9d2-9f81-4016-9993-8b58b194c80e",
+      "smokeType": "Cigarro",
+      "activity": "Estudando",
+      "dateTime": "2026-01-30T01:40:00.000Z"
+    },
+    {
+      "id": "55c4d762-fed0-4f65-8f8f-18b6988fcb68",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-30T12:33:00.000Z"
+    }
+  ],
+  "smokingTypes": [
+    "Cigarro",
+    "Meio charuto",
+    "Charuto inteiro",
+    "Cigarrilha / Purito",
+    "Tabaco",
+    "Pod",
+    "Chiclete de nicotina"
+  ],
+  "activities": [
+    "Estudando",
+    "Aula",
+    "Trabalhando",
+    "Jogando LoL",
+    "Bar",
+    "Festa",
+    "Social com amigos",
+    "Reunião Velt",
+    "Reunião Trabalho",
+    "Nada em especial"
+  ]
+}
