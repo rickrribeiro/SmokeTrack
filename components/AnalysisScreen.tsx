@@ -130,7 +130,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Fumo por Activity">
+        <ChartCard title="Fumo por Atividade">
           <ResponsiveContainer width="100%" height={200}>
             <BarChart layout="vertical" data={activityData.slice(0, 5)}>
               <XAxis type="number" hide />

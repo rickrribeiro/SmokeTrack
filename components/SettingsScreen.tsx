@@ -106,7 +106,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
 
           <div>
             <div className="flex justify-between items-center mb-3">
-              <h3 className="text-sm font-semibold text-slate-500">Activities</h3>
+              <h3 className="text-sm font-semibold text-slate-500">Atividades</h3>
               <button 
                 onClick={() => setIsAddingActivity(true)}
                 className="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:underline"
