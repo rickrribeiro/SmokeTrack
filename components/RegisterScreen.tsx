@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { SmokingRecord } from '../types';
 import { Trash2, PlusCircle, Clock } from 'lucide-react';
 import Modal from './Modal';
+import { getLocalISOString } from '@/util/dateUtils';
+
 
 interface RegisterScreenProps {
   smokingTypes: string[];
@@ -21,7 +23,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
 }) => {
   const [smokeType, setsmokeType] = useState(smokingTypes[0] || '');
   const [activity, setActivity] = useState(activities[0] || '');
-  const [dateTime, setDateTime] = useState(new Date().toISOString().slice(0, 16));
+  const [dateTime, setDateTime] = useState(getLocalISOString().slice(0, 16));
   const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
 
   const handleRegister = () => {
@@ -32,7 +34,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
       dateTime: new Date(dateTime).toISOString()
     };
     onAddRecord(newRecord);
-    setDateTime(new Date().toISOString().slice(0, 16));
+    setDateTime(getLocalISOString().slice(0, 16));
   };
 
   const todayRecords = records.filter(record => {
