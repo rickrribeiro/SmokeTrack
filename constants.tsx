@@ -20,7 +20,8 @@ export const INITIAL_ACTIVITIES = [
   'Jogando LoL',
   'Bar',
   'Festa',
-  'Social com amigos'
+  'Social com amigos',
+  'Nada em especial',
 ];
 
 export const PERIODS = Object.values(FilterRange);
