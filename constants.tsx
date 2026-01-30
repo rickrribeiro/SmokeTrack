@@ -14,7 +14,8 @@ export const INITIAL_SMOKE_TYPES = [
 export const INITIAL_ACTIVITIES = [
   'Estudando',
   'Aula',
-  'Reunião',
+  'Reunião Velt',
+  'Reunião Trabalho',
   'Trabalhando',
   'Jogando LoL',
   'Bar',
