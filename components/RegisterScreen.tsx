@@ -21,7 +21,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
   onAddRecord,
   onDeleteRecord
 }) => {
-  const [smokeType, setsmokeType] = useState(smokingTypes[0] || '');
+  const [smokeType, setsmokeType] = useState(smokingTypes.filter(a => a === "Tabaco")[0] || smokingTypes[0] || '');
   const [activity, setActivity] = useState(activities[0] || '');
   const [dateTime, setDateTime] = useState(getLocalISOString().slice(0, 16));
   const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
