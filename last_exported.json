@@ -4,127 +4,541 @@
       "smokeType": "Tabaco",
       "activity": "Reunião Velt",
       "dateTime": "2026-01-28T13:00:00.000Z",
-      "id": "385fb392-ee8c-45b2-8261-2efaeaa3ee10"
+      "id": "f41c9586-64b0-4bc1-a05d-670fcfa839a9"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Reunião Velt",
       "dateTime": "2026-01-28T14:00:00.000Z",
-      "id": "2fca6246-8d83-4f21-8b8e-9d0398e2a1fe"
+      "id": "e9f8ba8d-fd63-44fc-ba93-86ce7c934b59"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Reunião Velt",
       "dateTime": "2026-01-28T15:30:00.000Z",
-      "id": "610a4fea-85de-4df7-a4aa-95f5d6be5292"
+      "id": "806cb96a-c5bc-4067-8dc5-aa8d3b3dc9b8"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-28T16:00:00.000Z",
-      "id": "7d17206b-0a5e-4ddf-bd63-980813dd6199"
+      "id": "e87ed06d-bea3-4cc6-ba03-5f1c94766096"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-28T17:30:00.000Z",
-      "id": "912695a9-9594-4ea7-adac-4f88744182e9"
+      "id": "3ba89f8d-5d6a-44db-a000-4092bb35f6aa"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-28T19:00:00.000Z",
-      "id": "cf6741c9-2be1-4210-8175-9d1c867c3d78"
+      "id": "92770a5d-84cc-4f5c-a2d4-af9d4529f44f"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-28T20:00:00.000Z",
-      "id": "8bf5a372-6378-4c1b-a5ea-af6890017d52"
+      "id": "98e60984-0159-467f-bb9a-d3462baed091"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-28T22:00:00.000Z",
-      "id": "ae6c5109-fab1-4547-a6cf-2de59470302c"
+      "id": "0f1175df-807f-4b94-bb76-ce9555a23941"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Jogando LoL",
       "dateTime": "2026-01-29T00:00:00.000Z",
-      "id": "aa44ed9c-b58a-47ba-8f5c-9d8ae3e19c4f"
+      "id": "babef117-6b45-47b9-a411-a380a1ed32d1"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Jogando LoL",
       "dateTime": "2026-01-29T01:00:00.000Z",
-      "id": "14864f17-155e-4153-b0b9-7f5b17ed6c19"
+      "id": "3539dede-1645-4b33-b278-8f4659f651fc"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Estudando",
       "dateTime": "2026-01-29T13:00:00.000Z",
-      "id": "3ea995a2-4d6f-423f-a81c-c422a0d1c361"
+      "id": "9f045dcb-07b4-4d87-90e4-38deef5293b7"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-29T14:00:00.000Z",
-      "id": "68e7b011-c05e-440c-a1d0-cc9d2175169d"
+      "id": "36206586-e39a-4f8f-a98d-39281e4b19e8"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-29T15:00:00.000Z",
-      "id": "466768cd-d697-4b76-9351-a8deb90f533a"
+      "id": "73b5f261-4d34-4b9a-947c-a1989f5dfe9e"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Estudando",
       "dateTime": "2026-01-29T16:00:00.000Z",
-      "id": "68913b59-fb70-4115-9d86-dcb8f023680b"
+      "id": "894da0e7-6d92-46a2-89dc-2583e951d69e"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Reunião Trabalho",
       "dateTime": "2026-01-29T17:00:00.000Z",
-      "id": "6583886f-dadb-4c62-8d9f-da4a917cae35"
+      "id": "24496836-5a04-4a18-b812-5da04d26722f"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-29T18:00:00.000Z",
-      "id": "a82b49cf-0240-4153-8d3e-fa2f5f9e2d73"
+      "id": "08cbad66-3d05-43e1-9c0b-86664f21ea8a"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Trabalhando",
       "dateTime": "2026-01-29T19:00:00.000Z",
-      "id": "9ab9877b-594b-44f1-8dad-c7322512b442"
+      "id": "5d265536-88de-4616-9010-abaeb1e8f0df"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Estudando",
       "dateTime": "2026-01-29T20:00:00.000Z",
-      "id": "cf143b8d-375d-4121-a703-e2ce1ec909ee"
+      "id": "d3bec0fb-5ef9-4c7b-b2b0-5b2a4758b48c"
     },
     {
       "smokeType": "Tabaco",
       "activity": "Estudando",
       "dateTime": "2026-01-29T21:00:00.000Z",
-      "id": "2b651e02-aff6-4fde-a374-7513ad4e0653"
+      "id": "aa91dce2-705d-4495-98d2-33133fdf3275"
     },
     {
-      "id": "f49ab9d2-9f81-4016-9993-8b58b194c80e",
-      "smokeType": "Cigarro",
-      "activity": "Estudando",
-      "dateTime": "2026-01-30T01:40:00.000Z"
-    },
-    {
-      "id": "55c4d762-fed0-4f65-8f8f-18b6988fcb68",
+      "id": "e878c857-5de7-4a33-8537-ef52ee7ab01f",
       "smokeType": "Tabaco",
       "activity": "Estudando",
-      "dateTime": "2026-01-30T12:33:00.000Z"
+      "dateTime": "2026-01-30T01:36:00.000Z"
+    },
+    {
+      "id": "89eec779-d0f3-463b-a4f1-b3600e2f75d2",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-30T12:25:00.000Z"
+    },
+    {
+      "id": "68942bf9-9d39-4800-b2bf-3082f718ca4d",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-30T13:20:00.000Z"
+    },
+    {
+      "id": "558cd70d-7453-4973-a6b5-51b795e6236c",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-01-30T14:02:00.000Z"
+    },
+    {
+      "id": "50d8abcc-2fbb-41ea-963e-b548b5ed26c5",
+      "smokeType": "Pod",
+      "activity": "Nada em especial",
+      "dateTime": "2026-01-30T14:03:00.000Z"
+    },
+    {
+      "id": "3744fb1a-b07b-462a-bcca-ed45e99174f2",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-30T16:17:00.000Z"
+    },
+    {
+      "id": "30504769-391c-477e-9d46-163505db35c0",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-30T16:30:00.000Z"
+    },
+    {
+      "id": "c12e38a2-9adc-4170-9f06-877f277de070",
+      "smokeType": "Tabaco",
+      "activity": "Reunião Trabalho",
+      "dateTime": "2026-01-30T18:52:00.000Z"
+    },
+    {
+      "id": "18298dd4-68b6-4d72-a503-20be6aac818f",
+      "smokeType": "Tabaco",
+      "activity": "Reunião Trabalho",
+      "dateTime": "2026-01-30T19:50:00.000Z"
+    },
+    {
+      "id": "58679f80-2077-4d14-ae30-bc581506305b",
+      "smokeType": "Charuto inteiro",
+      "activity": "Jogando LoL",
+      "dateTime": "2026-01-30T21:52:00.000Z"
+    },
+    {
+      "id": "f73d8077-23a9-4888-b2a5-41b073f24ce4",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-01-31T02:00:00.000Z"
+    },
+    {
+      "id": "0a6592dc-a238-4c33-a1a0-85a163aee86f",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-01-31T02:00:00.000Z"
+    },
+    {
+      "id": "987f6078-8341-49b2-9386-3a2b52b74d76",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-31T06:33:00.000Z"
+    },
+    {
+      "id": "d61aa7ea-4fa6-4caf-aff3-90984087c5b4",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-01-31T06:33:00.000Z"
+    },
+    {
+      "id": "46f618ce-535e-45ba-8668-3079cf427849",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-01-31T19:27:00.000Z"
+    },
+    {
+      "id": "3ba7979d-0b32-4b99-99ea-bcdd839654a3",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-01-31T22:11:00.000Z"
+    },
+    {
+      "id": "a8f03b15-ef84-4fc7-b044-016721760e05",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T02:52:00.000Z"
+    },
+    {
+      "id": "b3fc44c5-d01e-46c3-ac52-073580892b49",
+      "smokeType": "Pod",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T02:52:00.000Z"
+    },
+    {
+      "id": "be374189-3350-4de5-9fda-c8790e0b4236",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T02:52:00.000Z"
+    },
+    {
+      "id": "8724382f-0a92-450c-9af5-2e331c325c7b",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-01T16:13:00.000Z"
+    },
+    {
+      "id": "f9f3fcef-65f9-45c5-8de7-0c27d79d4e2a",
+      "smokeType": "Meio charuto",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-01T15:14:00.000Z"
+    },
+    {
+      "id": "88b3a8ce-7879-48a3-8d37-7412de1c159d",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-01T17:41:00.000Z"
+    },
+    {
+      "id": "bf9734d3-1ff1-4f35-b7ac-906c61327d26",
+      "smokeType": "Pod",
+      "activity": "Festa",
+      "dateTime": "2026-02-01T19:53:00.000Z"
+    },
+    {
+      "id": "b18b33dd-484b-4c9f-a659-d6ecb5df9d04",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-02T15:37:00.000Z"
+    },
+    {
+      "id": "15aa0b5d-d12f-4c94-9117-33f992cb895b",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-02T15:37:00.000Z"
+    },
+    {
+      "id": "fd3079bf-8c96-4056-871b-c77770c52afd",
+      "smokeType": "Tabaco",
+      "activity": "Reunião Trabalho",
+      "dateTime": "2026-02-02T17:05:00.000Z"
+    },
+    {
+      "id": "c259f6f6-39de-446f-b819-d8724f95e3bd",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T02:05:00.000Z"
+    },
+    {
+      "id": "873aa22f-2c8f-448f-accb-79b18ed41528",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T02:06:00.000Z"
+    },
+    {
+      "id": "1d9bd93f-97a6-493f-83fc-930444a07213",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T02:06:00.000Z"
+    },
+    {
+      "id": "62594a6f-381e-47f1-bc56-3ed260461273",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T02:06:00.000Z"
+    },
+    {
+      "id": "aee52ca4-0311-4eab-9d15-acced95a0269",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T02:06:00.000Z"
+    },
+    {
+      "id": "c39c0dad-ecf6-433d-a5d3-c90167229896",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T02:06:00.000Z"
+    },
+    {
+      "id": "d9b0b484-7265-4377-a662-334c43b5f756",
+      "smokeType": "Tabaco",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T02:06:00.000Z"
+    },
+    {
+      "id": "ccd172f7-1b19-4ee1-adf3-683a383ba186",
+      "smokeType": "Pod",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T19:07:00.000Z"
+    },
+    {
+      "id": "3cc84a85-c487-4032-b215-6c5cad2ef5d0",
+      "smokeType": "Pod",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T20:08:00.000Z"
+    },
+    {
+      "id": "109ebc46-f098-4ef7-af03-092511135d8a",
+      "smokeType": "Pod",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T21:08:00.000Z"
+    },
+    {
+      "id": "896e5371-df41-410c-8374-8a19e436b286",
+      "smokeType": "Pod",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T22:08:00.000Z"
+    },
+    {
+      "id": "656c7fd6-d279-43f0-9e56-ba8cbf268eda",
+      "smokeType": "Pod",
+      "activity": "Bar",
+      "dateTime": "2026-02-01T23:08:00.000Z"
+    },
+    {
+      "id": "6bbfe5e2-ea1c-400f-b99b-6e3808972558",
+      "smokeType": "Pod",
+      "activity": "Bar",
+      "dateTime": "2026-02-02T00:08:00.000Z"
+    },
+    {
+      "id": "58fb5730-b9c8-4c4d-b4cf-b897eb47ad97",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-02T19:19:00.000Z"
+    },
+    {
+      "id": "22009585-1834-4503-a5a7-ead0fc02bfbb",
+      "smokeType": "Tabaco",
+      "activity": "Reunião Trabalho",
+      "dateTime": "2026-02-02T16:19:00.000Z"
+    },
+    {
+      "id": "a198955c-72b9-432f-a76a-a73ff680aecb",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-02T20:14:00.000Z"
+    },
+    {
+      "id": "54f82075-c524-4f54-91c9-566d44cca9d3",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-02T22:55:00.000Z"
+    },
+    {
+      "id": "45c8e393-7167-4c2e-906e-73948dd4a78e",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-02T23:53:00.000Z"
+    },
+    {
+      "id": "8f95f100-a16b-4d22-b756-7047c7cb64b0",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-03T10:39:00.000Z"
+    },
+    {
+      "id": "366aecb4-476e-4f82-bc64-44baba687468",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-03T12:27:00.000Z"
+    },
+    {
+      "id": "cbbebca0-75ff-4a91-aa20-285a662b74b4",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-03T14:04:00.000Z"
+    },
+    {
+      "id": "8cf1fe67-6897-43e1-9bc3-6090d650c86c",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-03T16:01:00.000Z"
+    },
+    {
+      "id": "7b1b7ebb-e667-4a16-aa99-e426d1980731",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-03T17:10:00.000Z"
+    },
+    {
+      "id": "e12d8c67-08d1-4c20-9138-6fcc9d600e9e",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-03T18:40:00.000Z"
+    },
+    {
+      "id": "db380162-0251-4a59-823b-112cc4a14ff1",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-03T20:32:00.000Z"
+    },
+    {
+      "id": "d9a44b43-051f-4190-b720-5a71ff2f2488",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-03T22:29:00.000Z"
+    },
+    {
+      "id": "afd69c76-18c5-4a9e-9c23-3ebaeed92446",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-04T00:23:00.000Z"
+    },
+    {
+      "id": "09de4e08-0f92-4485-9dac-b24c4015b5b7",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-04T14:42:00.000Z"
+    },
+    {
+      "id": "c79c560c-e131-429e-a183-c3244e1cca17",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-04T16:16:00.000Z"
+    },
+    {
+      "id": "cbe4306e-10a6-4f99-a664-12faa5d2fac7",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-04T17:26:00.000Z"
+    },
+    {
+      "id": "4c3e2cba-08dc-4b32-a4a8-234e6eed60db",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-04T18:28:00.000Z"
+    },
+    {
+      "id": "51c05f33-609a-4b08-83a2-4e692531a099",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-04T20:00:00.000Z"
+    },
+    {
+      "id": "743905e7-3b04-4422-826c-cae3257bc359",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-04T21:21:00.000Z"
+    },
+    {
+      "id": "17b16d32-06c5-418c-bbc9-67443345b79b",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-04T22:26:00.000Z"
+    },
+    {
+      "id": "bf92aca4-bc30-4722-bc55-32d94f664f76",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-05T11:59:00.000Z"
+    },
+    {
+      "id": "2da3496b-7806-4f84-819f-17225dee9fc5",
+      "smokeType": "Tabaco",
+      "activity": "Reunião Trabalho",
+      "dateTime": "2026-02-05T14:12:00.000Z"
+    },
+    {
+      "id": "4fae05c2-e290-4b1d-97eb-c952222580e1",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-05T15:33:00.000Z"
+    },
+    {
+      "id": "2b90155c-a68b-4ced-9d25-a0c6a841db2e",
+      "smokeType": "Tabaco",
+      "activity": "Reunião Trabalho",
+      "dateTime": "2026-02-05T16:36:00.000Z"
+    },
+    {
+      "id": "b775e301-303c-4fd0-bbde-9e61e8b3cf97",
+      "smokeType": "Tabaco",
+      "activity": "Jogando LoL",
+      "dateTime": "2026-02-05T17:36:00.000Z"
+    },
+    {
+      "id": "a0751513-c1fe-4064-91c4-b44dd68028e6",
+      "smokeType": "Tabaco",
+      "activity": "Trabalhando",
+      "dateTime": "2026-02-05T19:30:00.000Z"
+    },
+    {
+      "id": "d7dc5ed9-d3f8-40bb-8d1d-19016e7c1392",
+      "smokeType": "Tabaco",
+      "activity": "Jogando LoL",
+      "dateTime": "2026-02-05T20:26:00.000Z"
+    },
+    {
+      "id": "d1cf435b-d665-49d1-886e-5ff2dba400d9",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-05T22:30:00.000Z"
+    },
+    {
+      "id": "2e608572-ac9c-4376-922a-697656121874",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-05T23:42:00.000Z"
+    },
+    {
+      "id": "b1bd3e85-7544-4e51-8d7c-bb752b2701d7",
+      "smokeType": "Tabaco",
+      "activity": "Nada em especial",
+      "dateTime": "2026-02-06T11:30:00.000Z"
+    },
+    {
+      "id": "ddbb82eb-0fb1-4c63-9c4a-9e9ada9abafa",
+      "smokeType": "Tabaco",
+      "activity": "Estudando",
+      "dateTime": "2026-02-06T13:00:00.000Z"
     }
   ],
   "smokingTypes": [
@@ -139,13 +553,13 @@
   "activities": [
     "Estudando",
     "Aula",
+    "Reunião Velt",
+    "Reunião Trabalho",
     "Trabalhando",
     "Jogando LoL",
     "Bar",
     "Festa",
     "Social com amigos",
-    "Reunião Velt",
-    "Reunião Trabalho",
     "Nada em especial"
   ]
 }

@@ -43,8 +43,19 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
     return recordDate === today;
   }).sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime());
 
+  const timeSinceLastRecord = () => {
+    if (todayRecords.length === 0) return 'Nenhum registro hoje';
+    const lastRecordTime = new Date(todayRecords[0].dateTime).getTime();
+    const now = Date.now();
+    const diffMs = now - lastRecordTime;
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    return `${diffHours}h ${diffMinutes}m`;
+  };
+
   return (
     <div className="flex flex-col gap-6 pb-24">
+      <h2>Tempo desde o último registro: <b>{timeSinceLastRecord()}</b> </h2>
       <section className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
           <PlusCircle className="text-indigo-600" />
