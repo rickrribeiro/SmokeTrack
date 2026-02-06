@@ -18,3 +18,4 @@ Todo:
 - add daily average
 - tempo medio entre fumo (descontar 8hrs dormindo)
 - filtro por dia da semana botar total ou média
+- tooltip c quantidade no por tipo

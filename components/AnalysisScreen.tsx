@@ -167,6 +167,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
             <BarChart data={typeData.slice(0, 5)}>
               <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10}} />
               <YAxis hide />
+              <Tooltip cursor={{fill: 'transparent'}} />
               <Bar dataKey="count" radius={[8, 8, 0, 0]}>
                 {typeData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
