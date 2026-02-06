@@ -14,6 +14,16 @@
 
 
 Todo:
-- tempo medio entre fumo (descontar 8hrs dormindo)
-- ajustar ai a média que não ta batendo..., tb fzr p pegar os weekdays e weekends
-- grafico de fumo por dia ta invertido
+
+prioridade:
+- tempo medio entre fumo
+- media quebrando se filtra por dias de analise
+- colocar p média de dia de semana e fds não pegar o dia atual
+
+
+não prioritário:
+- colocar dps pra até 5am contar como o dia anterior
+- final de semana ser sexta 18hrs até 5am de segunda
+- unitários
+- refatorar codigo jogando funções pros helpers e revendo complexidade, modularizar melhor funções repetidas
+- time range filter

@@ -6,8 +6,9 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Cell
 } from 'recharts';
-import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours } from 'date-fns';
+import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours, max } from 'date-fns';
 import { getDaysDifference } from '../util/dateUtils';
+import { Table } from 'lucide-react';
 
 interface AnalysisScreenProps {
   records: SmokingRecord[];
@@ -59,8 +60,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
     });
   }, [filteredRecords]);
 
-  const dowData = useMemo(() => {
-    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+  const getTotalByDayOfWeek = () => {
     const counts = [
       { total: 0, diffDays: 0}, 
       { total: 0, diffDays: 0}, 
@@ -80,6 +80,13 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
       }
       counts[lastDay].total += 1;
     });
+    return counts
+  }
+
+  const dowData = useMemo(() => {
+    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+    const counts = getTotalByDayOfWeek();
+
     return days.map((day, i) => {
       let count = strategyFilter === filterStrategies.AVERAGE && counts[i].diffDays > 0 ? 
       (counts[i].total / counts[i].diffDays).toFixed(1) 
@@ -117,14 +124,14 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
     return Object.keys(map).map(name => ({ name, count: map[name] })).sort((a,b) => b.count - a.count);
   }, [filteredRecords]);
 
-  // const averageData = useMemo(() => {
-  //   const totalDays = periodo === FilterRange.TOTAL ? Math.max(1, Math.ceil((new Date().getTime() - new Date(records[0]?.dateTime || new Date()).getTime()) / (1000 * 60 * 60 * 24))) : parseInt(periodo.split(' ')[0]);
-  //   const average = filteredRecords.length / totalDays;
-  //   return average.toFixed(2);
-  // }, [filteredRecords, periodo, records]);
-
   const averageDataWhithoutToday = useMemo(() => {
-    const totalDays = periodo === FilterRange.TOTAL ? Math.max(1, Math.ceil((new Date().getTime() - new Date(records[0]?.dateTime || new Date()).getTime()) / (1000 * 60 * 60 * 24))) - 1 : parseInt(periodo.split(' ')[0]) - 1;
+    let days = parseInt(periodo.split(' ')[0]);
+    const maxRange = getDaysDifference(new Date(), new Date(filteredRecords[0]?.dateTime || new Date()));
+    if ( maxRange < days) {
+      days = maxRange;
+    }
+    const totalDays = periodo === FilterRange.TOTAL ? Math.max(1, Math.ceil((new Date().getTime() - new Date(filteredRecords[0]?.dateTime || new Date()).getTime()) / (1000 * 60 * 60 * 24))) - 1 : days;
+    if (totalDays <= 0) return "0.00";
     const recordsWithoutToday = filteredRecords.filter(r => {
       const recordDate = new Date(r.dateTime).toDateString();
       const today = new Date().toDateString();
@@ -132,6 +139,20 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
     });
     const average = recordsWithoutToday.length / totalDays;
     return average.toFixed(2);
+  }, [filteredRecords, periodo, records]);
+
+  const averageDataByTypeOfDay = useMemo(() => {
+    const counts = getTotalByDayOfWeek();
+    const weekends = (counts[0].total + counts[6].total) / (counts[0].diffDays + counts[6].diffDays || 1);
+    const weekDays = (counts.slice(1, 6).reduce((sum, c) => sum + c.total, 0) / (counts.slice(1, 6).reduce((sum, c) => sum + c.diffDays, 0) || 1));
+    return {
+      [filterDays.WEEKENDS]: weekends.toFixed(2),
+      [filterDays.WEEK_DAYS]: weekDays.toFixed(2)
+    }
+  }, [filteredRecords, periodo, records]);
+
+  const averageTimeBetweenSmokes = useMemo(() => {
+    return "to-do"
   }, [filteredRecords, periodo, records]);
 
   const COLORS = ['#6366f1', '#818cf8', '#a5b4fc', '#c7d2fe', '#e0e7ff'];
@@ -172,11 +193,29 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
       </div>
 
       <div className="space-y-6">
-        <ChartCard title="Média Diária ( sem hoje )" >
-          <div className="text-3xl font-bold text-slate-800">
-            { averageDataWhithoutToday }
-          </div>
-        </ChartCard>
+        <div> 
+          {/* TODO: Separar isso num component depois */}
+          <p className="text-lg font-bold pl-8">Médias (Por enquanto quebrado se filtra por dias de análise)</p>
+          <table className="border-separate border-spacing-x-8 mt-4">
+            <thead>
+              <tr>
+                <th className="text-left text-sm text-slate-700 pb-2 pr-8 border-r border-slate-500">Média Diária</th>
+                <th className="text-left text-sm text-slate-700 pb-2 pr-8 border-r border-slate-500">Dia de Semana</th>
+                <th className="text-left text-sm text-slate-700 pb-2 pr-8 border-r border-slate-500">Final de Semana</th>
+                <th className="text-left text-sm text-slate-700 pb-2">Média entre fumos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="text-3xl font-bold text-slate-800 border-r border-slate-500">{averageDataWhithoutToday}</td>
+                <td className="text-3xl font-bold text-slate-800 border-r border-slate-500">{averageDataByTypeOfDay[filterDays.WEEK_DAYS]}</td>
+                <td className="text-3xl font-bold text-slate-800 border-r border-slate-500">{averageDataByTypeOfDay[filterDays.WEEKENDS]}</td>
+                <td className="text-3xl font-bold text-slate-800">{averageTimeBetweenSmokes}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
         <ChartCard title="Fumo por Dia">
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={dailyData}>
