@@ -14,7 +14,6 @@
 
 
 Todo:
-- in analytics add filter to weekdays or weekend
-- add daily average
 - tempo medio entre fumo (descontar 8hrs dormindo)
-- filtro por dia da semana botar total ou média
+- ajustar ai a média que não ta batendo..., tb fzr p pegar os weekdays e weekends
+- grafico de fumo por dia ta invertido

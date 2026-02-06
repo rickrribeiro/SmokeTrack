@@ -1,5 +1,5 @@
 
-import { FilterRange } from './types';
+import { FilterRange, filterDays, filterStrategies } from './types';
 
 export const INITIAL_SMOKE_TYPES = [
   'Cigarro',
@@ -25,5 +25,9 @@ export const INITIAL_ACTIVITIES = [
 ];
 
 export const PERIODS = Object.values(FilterRange);
+
+export const FILTER_STRATEGIES = Object.values(filterStrategies);
+
+export const FILTER_DAYS = Object.values(filterDays);
 
 export const STORAGE_KEY = 'smoke_track_data';

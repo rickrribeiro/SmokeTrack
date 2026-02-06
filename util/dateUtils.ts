@@ -14,7 +14,13 @@ const getTimeDifferenceText = (dateTime1, dateTime2) => {
     return `${diffHours}h ${diffMinutes}m`;
 }
 
+const getDaysDifference = (dateTime1, dateTime2) => {
+  const diffMs = dateTime1 - dateTime2;
+  return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+}
+
 export {
     getLocalISOString,
-    getTimeDifferenceText
+    getTimeDifferenceText,
+    getDaysDifference
 }

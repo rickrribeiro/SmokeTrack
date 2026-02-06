@@ -1,12 +1,13 @@
 
 import React, { useMemo, useState } from 'react';
-import { SmokingRecord, FilterRange } from '../types';
-import { PERIODS } from '../constants';
+import { SmokingRecord, FilterRange, filterDays, filterStrategies } from '../types';
+import { PERIODS, FILTER_STRATEGIES, FILTER_DAYS } from '../constants';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Cell
 } from 'recharts';
 import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours } from 'date-fns';
+import { getDaysDifference } from '../util/dateUtils';
 
 interface AnalysisScreenProps {
   records: SmokingRecord[];
@@ -14,20 +15,38 @@ interface AnalysisScreenProps {
 
 const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
   const [periodo, setPeriodo] = useState<FilterRange>(FilterRange.DAYS_7);
+  const [daysFilter, setDaysFilter] = useState<filterDays>(filterDays.TOTAL);
+  const [strategyFilter, setStrategyFilter] = useState<filterStrategies>(filterStrategies.TOTAL);
 
   const filteredRecords = useMemo(() => {
-    if (periodo === FilterRange.TOTAL) return records;
-    
-    const days = parseInt(periodo.split(' ')[0]);
-    const startDate = subDays(new Date(), days);
-    
-    return records.filter(record => 
-      isWithinInterval(new Date(record.dateTime), {
-        start: startOfDay(startDate),
-        end: endOfDay(new Date())
-      })
-    );
-  }, [records, periodo]);
+    let filtered = records;
+    if (periodo != FilterRange.TOTAL) {
+      const days = parseInt(periodo.split(' ')[0]);
+      const startDate = subDays(new Date(), days);
+      
+      filtered = records.filter(record => 
+        isWithinInterval(new Date(record.dateTime), {
+          start: startOfDay(startDate),
+          end: endOfDay(new Date())
+        })
+      );
+    }
+    if (daysFilter === filterDays.WEEK_DAYS) {
+      filtered = filtered.filter(r => {
+        const day = getDay(new Date(r.dateTime));
+        return day !== 0 && day !== 6; 
+      });
+    } else if (daysFilter === filterDays.WEEKENDS) {
+      filtered = filtered.filter(r => {
+        const day = getDay(new Date(r.dateTime));
+        return day === 0 || day === 6; 
+      });
+    }
+
+    return filtered.sort((a,b) => {
+        return new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime();
+    });
+  }, [records, periodo, daysFilter, strategyFilter]);
 
   const dailyData = useMemo(() => {
     const map: Record<string, number> = {};
@@ -42,20 +61,45 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
 
   const dowData = useMemo(() => {
     const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
-    const counts = [0, 0, 0, 0, 0, 0, 0];
+    const counts = [
+      { total: 0, diffDays: 0}, 
+      { total: 0, diffDays: 0}, 
+      { total: 0, diffDays: 0}, 
+      { total: 0, diffDays: 0}, 
+      { total: 0, diffDays: 0}, 
+      { total: 0, diffDays: 0}, 
+      { total: 0, diffDays: 0}
+    ];
+    let lastDay = null;
+
     filteredRecords.forEach(r => {
-      counts[getDay(new Date(r.dateTime))] += 1;
+      const day = getDay(new Date(r.dateTime));
+      if (day !== lastDay) {
+        lastDay = day;
+        counts[lastDay].diffDays += 1;
+      }
+      counts[lastDay].total += 1;
     });
-    return days.map((day, i) => ({ day, count: counts[i] }));
-  }, [filteredRecords]);
+    return days.map((day, i) => {
+      let count = strategyFilter === filterStrategies.AVERAGE && counts[i].diffDays > 0 ? 
+      (counts[i].total / counts[i].diffDays).toFixed(1) 
+      : counts[i].total;
+      return { day, count: count }
+    });
+  }, [filteredRecords, strategyFilter]);
 
   const hourlyData = useMemo(() => {
     const counts = Array(24).fill(0);
     filteredRecords.forEach(r => {
       counts[getHours(new Date(r.dateTime))] += 1;
     });
-    return counts.map((count, hour) => ({ hour: `${hour}h`, count }));
-  }, [filteredRecords]);
+    return counts.map((count, hour) => {
+      let days = strategyFilter === filterStrategies.AVERAGE ? getDaysDifference(
+        new Date(filteredRecords[filteredRecords.length - 1]?.dateTime), 
+        new Date(filteredRecords[0]?.dateTime)) : 1;
+      return { hour: `${hour}h`, count: (count/days).toFixed(1) };
+    });
+  }, [filteredRecords, strategyFilter]);
 
   const activityData = useMemo(() => {
     const map: Record<string, number> = {};
@@ -94,16 +138,38 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
 
   return (
     <div className="flex flex-col gap-6 pb-24">
-      <section className="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md pt-2 pb-4">
-        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Período de Análise</label>
-        <select
-          value={periodo}
-          onChange={(e) => setPeriodo(e.target.value as FilterRange)}
-          className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-        >
-          {PERIODS.map(p => <option key={p} value={p}>{p}</option>)}
-        </select>
-      </section>
+      <div id="filters" className="space-y-1">
+        <section className="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md pt-2 pb-4">
+          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Período de Análise</label>
+          <select
+            value={periodo}
+            onChange={(e) => setPeriodo(e.target.value as FilterRange)}
+            className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            >
+            {PERIODS.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </section>
+        <section className="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md pt-2 pb-4">
+          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Dias de Análise</label>
+          <select
+            value={daysFilter}
+            onChange={(e) => setDaysFilter(e.target.value as filterDays)}
+            className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+          >
+            {FILTER_DAYS.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </section>
+        <section className="sticky top-0 z-30 bg-slate-50/80 backdrop-blur-md pt-2 pb-4">
+          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Estratégia Análise</label>
+          <select
+            value={strategyFilter}
+            onChange={(e) => setStrategyFilter(e.target.value as filterStrategies)}
+            className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+          >
+            {FILTER_STRATEGIES.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </section>
+      </div>
 
       <div className="space-y-6">
         <ChartCard title="Média Diária ( sem hoje )" >
@@ -126,7 +192,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Fumo por Dia da Semana">
+        <ChartCard title={`Fumo por Dia da Semana (${strategyFilter})`}>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={dowData}>
               <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
@@ -141,7 +207,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Fumo por Horário">
+        <ChartCard title={`Fumo por Horário (${strategyFilter})`}>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={hourlyData}>
               <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10}} />
