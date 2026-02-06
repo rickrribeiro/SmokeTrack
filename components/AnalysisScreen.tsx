@@ -146,6 +146,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
             <BarChart data={hourlyData}>
               <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10}} />
               <YAxis hide />
+              <Tooltip cursor={{fill: 'transparent'}} />
               <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -157,7 +158,11 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
               <XAxis type="number" hide />
               <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={80} tick={{fill: '#64748b', fontSize: 10}} />
               <Tooltip cursor={{fill: 'transparent'}} />
-              <Bar dataKey="count" fill="#818cf8" radius={[0, 8, 8, 0]} />
+              <Bar dataKey="count" fill="#818cf8" radius={[0, 8, 8, 0]}>
+                {typeData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+                </Bar>
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
