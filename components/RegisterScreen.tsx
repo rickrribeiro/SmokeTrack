@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SmokingRecord } from '../types';
 import { Trash2, PlusCircle, Clock } from 'lucide-react';
 import Modal from './Modal';
-import { getLocalISOString } from '@/util/dateUtils';
+import { getLocalISOString, getTimeDifferenceText } from '@/util/dateUtils';
 
 
 interface RegisterScreenProps {
@@ -47,10 +47,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
     if (todayRecords.length === 0) return 'Nenhum registro hoje';
     const lastRecordTime = new Date(todayRecords[0].dateTime).getTime();
     const now = Date.now();
-    const diffMs = now - lastRecordTime;
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    return `${diffHours}h ${diffMinutes}m`;
+    return getTimeDifferenceText(now, lastRecordTime);
   };
 
   return (
@@ -118,27 +115,39 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
           </div>
         ) : (
           <div className="space-y-3">
-            {todayRecords.map(record => (
-              <div key={record.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between animate-in slide-in-from-bottom-2 duration-300">
-                <div className="flex gap-4 items-center">
-                  <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-indigo-600">
-                    <Clock size={20} />
-                  </div>
-                  <div>
-                    <div className="font-bold text-slate-800">
-                      {new Date(record.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                    <div className="text-xs text-slate-500 font-medium">
-                      {record.smokeType} • {record.activity}
-                    </div>
-                  </div>
+            {todayRecords.map((record, index) => (
+              <div>
+                <div className="flex items-center justify-center" >
+                  <p>
+                    {
+                      index > 0 ? getTimeDifferenceText(
+                        new Date(todayRecords[index-1].dateTime).getTime(),
+                        new Date(todayRecords[index].dateTime).getTime()
+                      ) : null
+                    }
+                  </p>
                 </div>
-                <button
-                  onClick={() => setRecordToDelete(record.id)}
-                  className="p-2 text-slate-300 hover:text-red-500 transition-colors"
-                >
-                  <Trash2 size={18} />
-                </button>
+                <div key={record.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between animate-in slide-in-from-bottom-2 duration-300">
+                  <div className="flex gap-4 items-center">
+                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-indigo-600">
+                      <Clock size={20} />
+                    </div>
+                    <div>
+                      <div className="font-bold text-slate-800">
+                        {new Date(record.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                      <div className="text-xs text-slate-500 font-medium">
+                        {record.smokeType} • {record.activity}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setRecordToDelete(record.id)}
+                    className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
