@@ -55,7 +55,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
       map[d] = (map[d] || 0) + 1;
     });
     return Object.keys(map).map(date => ({ date, count: map[date] })).sort((a,b) => {
-        return 1; 
+        return -1; 
     });
   }, [filteredRecords]);
 
