@@ -8,7 +8,6 @@ import {
 } from 'recharts';
 import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours, max } from 'date-fns';
 import { getDaysDifference } from '../util/dateUtils';
-import { Table } from 'lucide-react';
 
 interface AnalysisScreenProps {
   records: SmokingRecord[];

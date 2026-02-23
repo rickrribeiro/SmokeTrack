@@ -27,3 +27,6 @@ não prioritário:
 - unitários
 - refatorar codigo jogando funções pros helpers e revendo complexidade, modularizar melhor funções repetidas
 - time range filter
+
+
+IGNORAR CARNAVAL e no calculo das datas tb subtrair p nao ficar errado
