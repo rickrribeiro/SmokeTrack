@@ -6,7 +6,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Cell
 } from 'recharts';
-import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours, max } from 'date-fns';
+import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours } from 'date-fns';
 import { getDaysDifference } from '../util/dateUtils';
 
 interface AnalysisScreenProps {
@@ -54,24 +54,41 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
       const d = format(new Date(r.dateTime), 'dd/MM');
       map[d] = (map[d] || 0) + 1;
     });
-    return Object.keys(map).map(date => ({ date, count: map[date] })).sort((a,b) => {
-        return -1; 
+    const points = Object.keys(map).map(date => ({ date, count: map[date] }));
+    return points.map((p, i) => {
+      const window = points.slice(Math.max(0, i - 6), i + 1);
+      const avg = window.reduce((s, x) => s + x.count, 0) / window.length;
+      return { ...p, movingAvg: parseFloat(avg.toFixed(2)) };
     });
   }, [filteredRecords]);
 
-  const getTotalByDayOfWeek = () => {
+  const recordsInPeriod = useMemo(() => {
+    if (periodo === FilterRange.TOTAL) {
+      return [...records].sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+    }
+    const days = parseInt(periodo.split(' ')[0]);
+    const startDate = subDays(new Date(), days);
+    return records
+      .filter(r => isWithinInterval(new Date(r.dateTime), {
+        start: startOfDay(startDate),
+        end: endOfDay(new Date())
+      }))
+      .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+  }, [records, periodo]);
+
+  const getTotalByDayOfWeek = (recs = filteredRecords) => {
     const counts = [
-      { total: 0, diffDays: 0}, 
-      { total: 0, diffDays: 0}, 
-      { total: 0, diffDays: 0}, 
-      { total: 0, diffDays: 0}, 
-      { total: 0, diffDays: 0}, 
-      { total: 0, diffDays: 0}, 
+      { total: 0, diffDays: 0},
+      { total: 0, diffDays: 0},
+      { total: 0, diffDays: 0},
+      { total: 0, diffDays: 0},
+      { total: 0, diffDays: 0},
+      { total: 0, diffDays: 0},
       { total: 0, diffDays: 0}
     ];
     let lastDay = null;
 
-    filteredRecords.forEach(r => {
+    recs.forEach(r => {
       const day = getDay(new Date(r.dateTime));
       if (day !== lastDay) {
         lastDay = day;
@@ -79,7 +96,7 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
       }
       counts[lastDay].total += 1;
     });
-    return counts
+    return counts;
   }
 
   const dowData = useMemo(() => {
@@ -124,35 +141,22 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
   }, [filteredRecords]);
 
   const averageDataWhithoutToday = useMemo(() => {
-    let days = parseInt(periodo.split(' ')[0]);
-    const maxRange = getDaysDifference(new Date(), new Date(filteredRecords[0]?.dateTime || new Date()));
-    if ( maxRange < days) {
-      days = maxRange;
-    }
-    const totalDays = periodo === FilterRange.TOTAL ? Math.max(1, Math.ceil((new Date().getTime() - new Date(filteredRecords[0]?.dateTime || new Date()).getTime()) / (1000 * 60 * 60 * 24))) - 1 : days;
-    if (totalDays <= 0) return "0.00";
-    const recordsWithoutToday = filteredRecords.filter(r => {
-      const recordDate = new Date(r.dateTime).toDateString();
-      const today = new Date().toDateString();
-      return recordDate !== today;
-    });
-    const average = recordsWithoutToday.length / totalDays;
-    return average.toFixed(2);
-  }, [filteredRecords, periodo, records]);
+    const today = new Date().toDateString();
+    const withoutToday = filteredRecords.filter(r => new Date(r.dateTime).toDateString() !== today);
+    const distinctDays = new Set(withoutToday.map(r => new Date(r.dateTime).toDateString())).size;
+    if (distinctDays === 0) return "0.00";
+    return (withoutToday.length / distinctDays).toFixed(2);
+  }, [filteredRecords]);
 
   const averageDataByTypeOfDay = useMemo(() => {
-    const counts = getTotalByDayOfWeek();
+    const counts = getTotalByDayOfWeek(recordsInPeriod);
     const weekends = (counts[0].total + counts[6].total) / (counts[0].diffDays + counts[6].diffDays || 1);
-    const weekDays = (counts.slice(1, 6).reduce((sum, c) => sum + c.total, 0) / (counts.slice(1, 6).reduce((sum, c) => sum + c.diffDays, 0) || 1));
+    const weekDays = counts.slice(1, 6).reduce((sum, c) => sum + c.total, 0) / (counts.slice(1, 6).reduce((sum, c) => sum + c.diffDays, 0) || 1);
     return {
       [filterDays.WEEKENDS]: weekends.toFixed(2),
       [filterDays.WEEK_DAYS]: weekDays.toFixed(2)
-    }
-  }, [filteredRecords, periodo, records]);
-
-  const averageTimeBetweenSmokes = useMemo(() => {
-    return "to-do"
-  }, [filteredRecords, periodo, records]);
+    };
+  }, [recordsInPeriod]);
 
   const COLORS = ['#6366f1', '#818cf8', '#a5b4fc', '#c7d2fe', '#e0e7ff'];
 
@@ -194,22 +198,20 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
       <div className="space-y-6">
         <div> 
           {/* TODO: Separar isso num component depois */}
-          <p className="text-lg font-bold pl-8">Médias (Por enquanto quebrado se filtra por dias de análise)</p>
+          <p className="text-lg font-bold pl-8">Médias</p>
           <table className="border-separate border-spacing-x-8 mt-4">
             <thead>
               <tr>
                 <th className="text-left text-sm text-slate-700 pb-2 pr-8 border-r border-slate-500">Média Diária</th>
                 <th className="text-left text-sm text-slate-700 pb-2 pr-8 border-r border-slate-500">Dia de Semana</th>
-                <th className="text-left text-sm text-slate-700 pb-2 pr-8 border-r border-slate-500">Final de Semana</th>
-                <th className="text-left text-sm text-slate-700 pb-2">Média entre fumos</th>
+                <th className="text-left text-sm text-slate-700 pb-2">Final de Semana</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td className="text-3xl font-bold text-slate-800 border-r border-slate-500">{averageDataWhithoutToday}</td>
                 <td className="text-3xl font-bold text-slate-800 border-r border-slate-500">{averageDataByTypeOfDay[filterDays.WEEK_DAYS]}</td>
-                <td className="text-3xl font-bold text-slate-800 border-r border-slate-500">{averageDataByTypeOfDay[filterDays.WEEKENDS]}</td>
-                <td className="text-3xl font-bold text-slate-800">{averageTimeBetweenSmokes}</td>
+                <td className="text-3xl font-bold text-slate-800">{averageDataByTypeOfDay[filterDays.WEEKENDS]}</td>
               </tr>
             </tbody>
           </table>
@@ -221,11 +223,11 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
               <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-              <Tooltip 
+              <Tooltip
                 contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}}
-                itemStyle={{color: '#6366f1'}}
               />
-              <Line type="monotone" dataKey="count" stroke="#6366f1" strokeWidth={3} dot={{r: 4, fill: '#6366f1'}} activeDot={{r: 6}} />
+              <Line type="monotone" dataKey="count" name="Diário" stroke="#a5b4fc" strokeWidth={1} dot={false} activeDot={{r: 4}} />
+              <Line type="monotone" dataKey="movingAvg" name="Média 7d" stroke="#6366f1" strokeWidth={3} dot={false} activeDot={{r: 6}} />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
