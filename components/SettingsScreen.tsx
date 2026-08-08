@@ -8,7 +8,7 @@ import Modal from './Modal';
 interface SettingsScreenProps {
   data: AppData;
   onImport: (newData: AppData) => void;
-  onUpdateLists: (types: string[], activities: string[]) => void;
+  onUpdateLists: (types: string[], activities: string[], notes: string[]) => void;
 }
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdateLists }) => {
@@ -16,11 +16,13 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
   const [exportJson, setExportJson] = useState('');
   const [isCopied, setIsCopied] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error', msg: string } | null>(null);
-  
+
   const [newType, setNewType] = useState('');
   const [newActivity, setNewActivity] = useState('');
+  const [newNote, setNewNote] = useState('');
   const [isAddingType, setIsAddingType] = useState(false);
   const [isAddingActivity, setIsAddingActivity] = useState(false);
+  const [isAddingNote, setIsAddingNote] = useState(false);
 
   const handleExport = () => {
     const json = storageService.exportJSON(data);
@@ -48,18 +50,24 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
   const deleteType = (index: number) => {
     const newList = [...data.smokingTypes];
     newList.splice(index, 1);
-    onUpdateLists(newList, data.activities);
+    onUpdateLists(newList, data.activities, data.notes);
   };
 
   const deleteActivity = (index: number) => {
     const newList = [...data.activities];
     newList.splice(index, 1);
-    onUpdateLists(data.smokingTypes, newList);
+    onUpdateLists(data.smokingTypes, newList, data.notes);
+  };
+
+  const deleteNote = (index: number) => {
+    const newList = [...data.notes];
+    newList.splice(index, 1);
+    onUpdateLists(data.smokingTypes, data.activities, newList);
   };
 
   const addType = () => {
     if (newType.trim()) {
-      onUpdateLists([...data.smokingTypes, newType.trim()], data.activities);
+      onUpdateLists([...data.smokingTypes, newType.trim()], data.activities, data.notes);
       setNewType('');
       setIsAddingType(false);
     }
@@ -67,9 +75,17 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
 
   const addActivity = () => {
     if (newActivity.trim()) {
-      onUpdateLists(data.smokingTypes, [...data.activities, newActivity.trim()]);
+      onUpdateLists(data.smokingTypes, [...data.activities, newActivity.trim()], data.notes);
       setNewActivity('');
       setIsAddingActivity(false);
+    }
+  };
+
+  const addNote = () => {
+    if (newNote.trim()) {
+      onUpdateLists(data.smokingTypes, data.activities, [...data.notes, newNote.trim()]);
+      setNewNote('');
+      setIsAddingNote(false);
     }
   };
 
@@ -119,6 +135,28 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
                 <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 group">
                   {a}
                   <button onClick={() => deleteActivity(i)} className="hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+                    <Trash2 size={12} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-sm font-semibold text-slate-500">Notas Pré-definidas</h3>
+              <button
+                onClick={() => setIsAddingNote(true)}
+                className="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:underline"
+              >
+                <Plus size={14} /> Adicionar
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {data.notes.map((n, i) => (
+                <span key={i} className="bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 group">
+                  {n}
+                  <button onClick={() => deleteNote(i)} className="hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
                     <Trash2 size={12} />
                   </button>
                 </span>
@@ -218,6 +256,21 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <button onClick={addActivity} className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl">Adicionar</button>
+        </div>
+      </Modal>
+
+      <Modal isOpen={isAddingNote} onClose={() => setIsAddingNote(false)} title="Nova Nota">
+        <div className="space-y-4">
+          <input
+            autoFocus
+            type="text"
+            placeholder="Ex: Depois do almoço"
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && addNote()}
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button onClick={addNote} className="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl">Adicionar</button>
         </div>
       </Modal>
     </div>

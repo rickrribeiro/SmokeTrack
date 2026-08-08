@@ -30,19 +30,28 @@ const App: React.FC = () => {
     }));
   }, []);
 
+  const updateRecord = useCallback((record: SmokingRecord) => {
+    setData(prev => ({
+      ...prev,
+      records: prev.records.map(r => r.id === record.id ? record : r)
+    }));
+  }, []);
+
   const importData = useCallback((importedData: AppData) => {
     const newData: AppData = { ...data };
     newData.records = newData.records.concat(importedData.records || []);
     newData.smokingTypes = Array.from(new Set([...newData.smokingTypes, ...importedData.smokingTypes || []]));
     newData.activities = Array.from(new Set([...newData.activities, ...importedData.activities || []]));
+    newData.notes = Array.from(new Set([...newData.notes, ...importedData.notes || []]));
     setData(newData);
   }, [data]);
 
-  const updateLists = useCallback((types: string[], activities: string[]) => {
+  const updateLists = useCallback((types: string[], activities: string[], notes: string[]) => {
     setData(prev => ({
       ...prev,
       smokingTypes: types,
-      activities: activities
+      activities: activities,
+      notes: notes
     }));
   }, []);
 
@@ -63,9 +72,11 @@ const App: React.FC = () => {
           <RegisterScreen
             smokingTypes={data.smokingTypes}
             activities={data.activities}
+            notes={data.notes}
             records={data.records}
             onAddRecord={addRecord}
             onDeleteRecord={deleteRecord}
+            onUpdateRecord={updateRecord}
           />
         )}
         

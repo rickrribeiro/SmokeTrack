@@ -1,3 +1,5 @@
+import { formatDuration } from './duration';
+
 const getLocalISOString = () => {
   const now = new Date();
   const tzOffset = now.getTimezoneOffset() * 60000;
@@ -7,11 +9,9 @@ const getLocalISOString = () => {
   return localISO;
 };
 
+// dateTime1 é sempre o timestamp mais recente nos usos atuais (RegisterScreen).
 const getTimeDifferenceText = (dateTime1, dateTime2) => {
-    const diffMs = dateTime1 - dateTime2;
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    return `${diffHours}h ${diffMinutes}m`;
+    return formatDuration(dateTime1 - dateTime2);
 }
 
 const getDaysDifference = (dateTime1, dateTime2) => {
