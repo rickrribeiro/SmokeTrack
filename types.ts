@@ -1,14 +1,19 @@
+export type Mood = 'calmo' | 'neutro' | 'estressado';
+
 export interface SmokingRecord {
   id: string;
   smokeType: string;
   dateTime: string;
   activity: string;
+  mood?: Mood;
+  note?: string;
 }
 
 export interface AppData {
   records: SmokingRecord[];
   smokingTypes: string[];
   activities: string[];
+  notes: string[];
 }
 
 export enum FilterRange {

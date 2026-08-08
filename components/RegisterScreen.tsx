@@ -1,40 +1,52 @@
 
 import React, { useState } from 'react';
 import { SmokingRecord } from '../types';
-import { Trash2, PlusCircle, Clock } from 'lucide-react';
+import { Trash2, PlusCircle, Clock, Pencil } from 'lucide-react';
 import Modal from './Modal';
+import RecordForm, { RecordFormValues } from './RecordForm';
+import EditRecordModal from './EditRecordModal';
+import { MOOD_OPTIONS } from '../constants';
 import { getLocalISOString, getTimeDifferenceText } from '@/util/dateUtils';
 
 
 interface RegisterScreenProps {
   smokingTypes: string[];
   activities: string[];
+  notes: string[];
   records: SmokingRecord[];
   onAddRecord: (record: SmokingRecord) => void;
   onDeleteRecord: (id: string) => void;
+  onUpdateRecord: (record: SmokingRecord) => void;
 }
 
 const RegisterScreen: React.FC<RegisterScreenProps> = ({
   smokingTypes,
   activities,
+  notes,
   records,
   onAddRecord,
-  onDeleteRecord
+  onDeleteRecord,
+  onUpdateRecord
 }) => {
-  const [smokeType, setsmokeType] = useState(smokingTypes.filter(a => a === "Tabaco")[0] || smokingTypes[0] || '');
-  const [activity, setActivity] = useState(activities[0] || '');
-  const [dateTime, setDateTime] = useState(getLocalISOString().slice(0, 16));
+  const [formValues, setFormValues] = useState<RecordFormValues>({
+    smokeType: smokingTypes.filter(a => a === "Tabaco")[0] || smokingTypes[0] || '',
+    activity: activities[0] || '',
+    dateTime: getLocalISOString().slice(0, 16),
+  });
   const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
+  const [recordToEdit, setRecordToEdit] = useState<SmokingRecord | null>(null);
 
   const handleRegister = () => {
     const newRecord: SmokingRecord = {
       id: crypto.randomUUID(),
-      smokeType,
-      activity,
-      dateTime: new Date(dateTime).toISOString()
+      smokeType: formValues.smokeType,
+      activity: formValues.activity,
+      dateTime: new Date(formValues.dateTime).toISOString(),
+      mood: formValues.mood,
+      note: formValues.note,
     };
     onAddRecord(newRecord);
-    setDateTime(getLocalISOString().slice(0, 16));
+    setFormValues(prev => ({ ...prev, dateTime: getLocalISOString().slice(0, 16), mood: undefined, note: undefined }));
   };
 
   const todayRecords = records.filter(record => {
@@ -50,6 +62,8 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
     return getTimeDifferenceText(now, lastRecordTime);
   };
 
+  const moodEmoji = (mood?: SmokingRecord['mood']) => MOOD_OPTIONS.find(m => m.value === mood)?.emoji;
+
   return (
     <div className="flex flex-col gap-6 pb-24">
       <h2>Tempo desde o último registro: <b>{timeSinceLastRecord()}</b> </h2>
@@ -58,39 +72,15 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
           <PlusCircle className="text-indigo-600" />
           Novo Registro
         </h2>
-        
+
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1 ml-1">O que eu fumei?</label>
-            <select
-              value={smokeType}
-              onChange={(e) => setsmokeType(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 transition-all outline-none appearance-none"
-            >
-              {smokingTypes.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1 ml-1">Data e Hora</label>
-            <input
-              type="datetime-local"
-              value={dateTime}
-              onChange={(e) => setDateTime(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1 ml-1">O que eu estava fazendo?</label>
-            <select
-              value={activity}
-              onChange={(e) => setActivity(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 transition-all outline-none appearance-none"
-            >
-              {activities.map(a => <option key={a} value={a}>{a}</option>)}
-            </select>
-          </div>
+          <RecordForm
+            smokingTypes={smokingTypes}
+            activities={activities}
+            notes={notes}
+            values={formValues}
+            onChange={setFormValues}
+          />
 
           <button
             onClick={handleRegister}
@@ -133,20 +123,30 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
                       <Clock size={20} />
                     </div>
                     <div>
-                      <div className="font-bold text-slate-800">
+                      <div className="font-bold text-slate-800 flex items-center gap-1.5">
                         {new Date(record.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {moodEmoji(record.mood) && <span className="text-sm">{moodEmoji(record.mood)}</span>}
                       </div>
                       <div className="text-xs text-slate-500 font-medium">
                         {record.smokeType} • {record.activity}
+                        {record.note && <> • {record.note}</>}
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => setRecordToDelete(record.id)}
-                    className="p-2 text-slate-300 hover:text-red-500 transition-colors"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setRecordToEdit(record)}
+                      className="p-2 text-slate-300 hover:text-indigo-500 transition-colors"
+                    >
+                      <Pencil size={18} />
+                    </button>
+                    <button
+                      onClick={() => setRecordToDelete(record.id)}
+                      className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -182,6 +182,15 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({
           </div>
         </div>
       </Modal>
+
+      <EditRecordModal
+        record={recordToEdit}
+        smokingTypes={smokingTypes}
+        activities={activities}
+        notes={notes}
+        onClose={() => setRecordToEdit(null)}
+        onSave={onUpdateRecord}
+      />
     </div>
   );
 };

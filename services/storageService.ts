@@ -1,12 +1,14 @@
 
 import { AppData } from '../types';
-import { STORAGE_KEY, INITIAL_SMOKE_TYPES, INITIAL_ACTIVITIES } from '../constants';
+import { STORAGE_KEY, INITIAL_SMOKE_TYPES, INITIAL_ACTIVITIES, INITIAL_NOTES } from '../constants';
 import { validateRecords } from './validators';
+import { normalizeAppData } from './dataMigration';
 
 const INITIAL_DATA: AppData = {
   records: [],
   smokingTypes: INITIAL_SMOKE_TYPES,
   activities: INITIAL_ACTIVITIES,
+  notes: INITIAL_NOTES,
 };
 
 export const storageService = {
@@ -18,7 +20,7 @@ export const storageService = {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return INITIAL_DATA;
     try {
-      return JSON.parse(saved);
+      return normalizeAppData(JSON.parse(saved));
     } catch (e) {
       console.error('Erro ao carregar dados', e);
       return INITIAL_DATA;
@@ -35,9 +37,10 @@ export const storageService = {
         data &&
         (data.records && Array.isArray(data.records) && validateRecords(data)) ||
         (data.smokingTypes && Array.isArray(data.smokingTypes)) ||
-        (data.activities && Array.isArray(data.activities))
+        (data.activities && Array.isArray(data.activities)) ||
+        (data.notes && Array.isArray(data.notes))
       ) {
-        return data as AppData;
+        return normalizeAppData(data);
       }
       return null;
     } catch (e) {
