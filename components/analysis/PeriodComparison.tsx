@@ -1,14 +1,14 @@
 
 import React, { useMemo } from 'react';
 import { TrendingDown, TrendingUp, Minus } from 'lucide-react';
-import { SmokingRecord, FilterRange, filterDays } from '../../types';
+import { SmokingRecord, AnalysisMode, AnalysisSelection, filterDays } from '../../types';
 import { computeComparison, ComparisonMetric } from '../../util/analytics';
 import { formatDuration } from '../../util/duration';
 import ChartCard from './ChartCard';
 
 interface PeriodComparisonProps {
   records: SmokingRecord[];
-  periodo: FilterRange;
+  selection: AnalysisSelection;
   daysFilter: filterDays;
 }
 
@@ -43,11 +43,12 @@ const MetricRow: React.FC<{ label: string; metric: ComparisonMetric; format: (v:
   </div>
 );
 
-const PeriodComparison: React.FC<PeriodComparisonProps> = ({ records, periodo, daysFilter }) => {
-  const comparison = useMemo(() => computeComparison(records, periodo, daysFilter), [records, periodo, daysFilter]);
+const PeriodComparison: React.FC<PeriodComparisonProps> = ({ records, selection, daysFilter }) => {
+  const comparison = useMemo(() => computeComparison(records, selection, daysFilter), [records, selection, daysFilter]);
+  const isMonth = selection.mode === AnalysisMode.MONTH;
 
   return (
-    <ChartCard title="Comparação com Período Anterior">
+    <ChartCard title={isMonth ? 'Comparação com Mês Anterior' : 'Comparação com Período Anterior'}>
       {!comparison ? (
         <p className="text-slate-400 text-sm text-center py-6">
           Comparação disponível apenas para períodos com duração fixa (não é possível para "Total").
@@ -59,6 +60,11 @@ const PeriodComparison: React.FC<PeriodComparisonProps> = ({ records, periodo, d
           <MetricRow label="Média Dias Úteis" metric={comparison.weekdayAverage} format={v => v.toFixed(2)} />
           <MetricRow label="Média Fim de Semana" metric={comparison.weekendAverage} format={v => v.toFixed(2)} />
           <MetricRow label="Intervalo Médio" metric={comparison.avgIntervalMs} format={v => formatDuration(v)} />
+          {isMonth && comparison.currentRange.end.getTime() > Date.now() && (
+            <p className="text-[11px] text-slate-400 mt-3">
+              Mês em andamento: o total ainda não cobre o mês inteiro — compare principalmente as médias.
+            </p>
+          )}
         </div>
       )}
     </ChartCard>

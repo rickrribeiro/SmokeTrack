@@ -1,5 +1,5 @@
 
-import { FilterRange, filterDays, filterStrategies, Mood } from './types';
+import { FilterRange, filterDays, filterStrategies, Mood, AnalysisMode } from './types';
 
 export const INITIAL_SMOKE_TYPES = [
   'Cigarro',
@@ -47,6 +47,11 @@ export const PERIODS = Object.values(FilterRange);
 export const FILTER_STRATEGIES = Object.values(filterStrategies);
 
 export const FILTER_DAYS = Object.values(filterDays);
+
+export const ANALYSIS_MODE_LABELS: Record<AnalysisMode, string> = {
+  [AnalysisMode.PERIOD]: 'Período',
+  [AnalysisMode.MONTH]: 'Mês',
+};
 
 export const STORAGE_KEY = 'smoke_track_data';
 

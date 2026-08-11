@@ -29,7 +29,7 @@ SmokeTrack é um app pessoal de **registro e análise de hábitos de fumar** (ci
 Área mais trabalhada do app (evolução recente confirmada pelo histórico de commits: filtros de estratégia/dias, correções de gráfico diário invertido, novas médias, melhorias visuais).
 
 **Filtros disponíveis** (aplicados em conjunto):
-- **Período de Análise**: 3 / 7 / 14 / 30 / 60 / 90 dias, ou Total.
+- **Recorte da Análise**: alterna entre **Período** (3 / 7 / 14 / 30 / 60 / 90 dias, ou Total) e **Mês** (mês-calendário, escolhido entre os meses que têm registros + o mês atual). No modo Mês aparece um card **"Resumo de \<mês\>"** e a comparação passa a ser com o mês anterior.
 - **Dias de Análise**: Total / apenas dias de semana / apenas finais de semana.
 - **Estratégia de Análise**: Total (soma) vs. Média (por dia) — afeta os gráficos de dia da semana e de horário.
 

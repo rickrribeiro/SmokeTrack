@@ -1,8 +1,11 @@
 
-import { format, subDays, isWithinInterval, startOfDay, endOfDay, getDay, getHours } from 'date-fns';
-import { SmokingRecord, FilterRange, filterDays, filterStrategies, Mood } from '../types';
+import { format, subDays, addDays, startOfDay, endOfDay, getDay, getHours } from 'date-fns';
+import { SmokingRecord, FilterRange, filterDays, filterStrategies, Mood, AnalysisMode, AnalysisSelection, DateRange } from '../types';
 import { getDaysDifference } from './dateUtils';
+import { getMonthRange, getPreviousMonthKey } from './months';
 import { MOOD_OPTIONS, HOUR_BUCKETS, INTERVAL_BUCKETS, HourBucket } from '../constants';
+
+export type { DateRange };
 
 export interface DayOfWeekCount {
   total: number;
@@ -32,48 +35,76 @@ export interface NameCount {
 
 const DAY_LABELS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
 
-/** Filtra registros por período + tipo de dia (dias de semana/fim de semana), ordenado cronologicamente. */
-export function getFilteredRecords(records: SmokingRecord[], periodo: FilterRange, daysFilter: filterDays): SmokingRecord[] {
-  let filtered = records;
-  if (periodo !== FilterRange.TOTAL) {
-    const days = parseInt(periodo.split(' ')[0]);
-    const startDate = subDays(new Date(), days);
+const byDateTimeAsc = (a: SmokingRecord, b: SmokingRecord) =>
+  new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime();
 
-    filtered = records.filter(record =>
-      isWithinInterval(new Date(record.dateTime), {
-        start: startOfDay(startDate),
-        end: endOfDay(new Date())
-      })
-    );
-  }
-  if (daysFilter === filterDays.WEEK_DAYS) {
-    filtered = filtered.filter(r => {
-      const day = getDay(new Date(r.dateTime));
-      return day !== 0 && day !== 6;
-    });
-  } else if (daysFilter === filterDays.WEEKENDS) {
-    filtered = filtered.filter(r => {
-      const day = getDay(new Date(r.dateTime));
-      return day === 0 || day === 6;
-    });
-  }
-
-  return filtered.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+function matchesDaysFilter(date: Date, daysFilter: filterDays): boolean {
+  const day = getDay(date);
+  if (daysFilter === filterDays.WEEK_DAYS) return day !== 0 && day !== 6;
+  if (daysFilter === filterDays.WEEKENDS) return day === 0 || day === 6;
+  return true;
 }
 
-/** Filtra registros só por período (sem aplicar o filtro de dias de semana/fim de semana). */
-export function getRecordsInPeriod(records: SmokingRecord[], periodo: FilterRange): SmokingRecord[] {
-  if (periodo === FilterRange.TOTAL) {
-    return [...records].sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
-  }
+/**
+ * Intervalo de um período relativo ("7 dias" = de 7 dias atrás até o fim de hoje).
+ * `null` para Total (histórico completo, sem limites).
+ */
+export function getPeriodRange(periodo: FilterRange, now: Date = new Date()): DateRange | null {
+  if (periodo === FilterRange.TOTAL) return null;
   const days = parseInt(periodo.split(' ')[0]);
-  const startDate = subDays(new Date(), days);
+  return { start: startOfDay(subDays(now, days)), end: endOfDay(now) };
+}
+
+/** Resolve o recorte escolhido na tela (período relativo ou mês-calendário) em um intervalo. `null` = Total. */
+export function getSelectionRange(selection: AnalysisSelection, now: Date = new Date()): DateRange | null {
+  return selection.mode === AnalysisMode.MONTH
+    ? getMonthRange(selection.month)
+    : getPeriodRange(selection.periodo, now);
+}
+
+/** Recorte imediatamente anterior ao selecionado (mês anterior, ou período de mesma duração). `null` = Total. */
+export function getPreviousSelectionRange(selection: AnalysisSelection, now: Date = new Date()): DateRange | null {
+  return selection.mode === AnalysisMode.MONTH
+    ? getMonthRange(getPreviousMonthKey(selection.month))
+    : getPreviousPeriodRange(selection.periodo, now);
+}
+
+/**
+ * Filtra por intervalo (`null` = sem limite) + tipo de dia, ordenado cronologicamente.
+ * É a única porta de entrada de filtragem da tela de Análise, para os dois modos.
+ */
+export function filterRecordsInRange(records: SmokingRecord[], range: DateRange | null, daysFilter: filterDays): SmokingRecord[] {
+  const startMs = range ? range.start.getTime() : -Infinity;
+  const endMs = range ? range.end.getTime() : Infinity;
   return records
-    .filter(r => isWithinInterval(new Date(r.dateTime), {
-      start: startOfDay(startDate),
-      end: endOfDay(new Date())
-    }))
-    .sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+    .filter(r => {
+      const date = new Date(r.dateTime);
+      const t = date.getTime();
+      return t >= startMs && t <= endMs && matchesDaysFilter(date, daysFilter);
+    })
+    .sort(byDateTimeAsc);
+}
+
+/** Registros do recorte selecionado, respeitando o filtro de dias. */
+export function getSelectionRecords(records: SmokingRecord[], selection: AnalysisSelection, daysFilter: filterDays, now: Date = new Date()): SmokingRecord[] {
+  return filterRecordsInRange(records, getSelectionRange(selection, now), daysFilter);
+}
+
+/** Registros do recorte selecionado ignorando o filtro de dias (usado pelas médias por tipo de dia). */
+export function getSelectionOnlyRecords(records: SmokingRecord[], selection: AnalysisSelection, now: Date = new Date()): SmokingRecord[] {
+  return filterRecordsInRange(records, getSelectionRange(selection, now), filterDays.TOTAL);
+}
+
+/** Quantidade de dias-calendário dentro do intervalo que satisfazem o filtro de dias (extremos inclusive). */
+export function countCalendarDays(range: DateRange, daysFilter: filterDays): number {
+  let cursor = startOfDay(range.start);
+  const last = startOfDay(range.end);
+  let count = 0;
+  while (cursor.getTime() <= last.getTime()) {
+    if (matchesDaysFilter(cursor, daysFilter)) count += 1;
+    cursor = addDays(cursor, 1);
+  }
+  return count;
 }
 
 /**
@@ -308,11 +339,6 @@ export function buildDayTimelineData(records: SmokingRecord[], date: Date): Time
 // Comparação de períodos
 // ---------------------------------------------------------------------------
 
-export interface DateRange {
-  start: Date;
-  end: Date;
-}
-
 /**
  * Retorna o intervalo do "período anterior de mesma duração" (mesmo nº de
  * dias-calendário, sem sobreposição/lacuna). `null` quando periodo = Total,
@@ -325,19 +351,6 @@ export function getPreviousPeriodRange(periodo: FilterRange, now: Date = new Dat
   const previousEnd = endOfDay(subDays(currentStart, 1));
   const previousStart = startOfDay(subDays(currentStart, days));
   return { start: previousStart, end: previousEnd };
-}
-
-function filterRecordsInRange(records: SmokingRecord[], range: DateRange, daysFilter: filterDays): SmokingRecord[] {
-  let filtered = records.filter(r => {
-    const t = new Date(r.dateTime).getTime();
-    return t >= range.start.getTime() && t <= range.end.getTime();
-  });
-  if (daysFilter === filterDays.WEEK_DAYS) {
-    filtered = filtered.filter(r => { const day = getDay(new Date(r.dateTime)); return day !== 0 && day !== 6; });
-  } else if (daysFilter === filterDays.WEEKENDS) {
-    filtered = filtered.filter(r => { const day = getDay(new Date(r.dateTime)); return day === 0 || day === 6; });
-  }
-  return filtered.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
 }
 
 /**
@@ -417,13 +430,15 @@ export interface ComparisonResult {
   avgIntervalMs: ComparisonMetric;
 }
 
-/** `null` quando periodo = Total (sem duração fixa para definir um "período anterior"). */
-export function computeComparison(records: SmokingRecord[], periodo: FilterRange, daysFilter: filterDays, now: Date = new Date()): ComparisonResult | null {
-  if (periodo === FilterRange.TOTAL) return null;
-  const days = parseInt(periodo.split(' ')[0]);
-  const currentRange: DateRange = { start: startOfDay(subDays(now, days)), end: endOfDay(now) };
-  const previousRange = getPreviousPeriodRange(periodo, now);
-  if (!previousRange) return null;
+/**
+ * Compara o recorte selecionado com o anterior equivalente (mês anterior no modo
+ * mês; período de mesma duração no modo período). `null` quando periodo = Total,
+ * pois não há um "anterior" definido.
+ */
+export function computeComparison(records: SmokingRecord[], selection: AnalysisSelection, daysFilter: filterDays, now: Date = new Date()): ComparisonResult | null {
+  const currentRange = getSelectionRange(selection, now);
+  const previousRange = getPreviousSelectionRange(selection, now);
+  if (!currentRange || !previousRange) return null;
 
   const currentSnapshot = computeSnapshot(records, currentRange, daysFilter);
   const previousSnapshot = computeSnapshot(records, previousRange, daysFilter);
@@ -436,6 +451,100 @@ export function computeComparison(records: SmokingRecord[], periodo: FilterRange
     weekdayAverage: buildMetric(currentSnapshot.weekdayAverage, previousSnapshot.weekdayAverage),
     weekendAverage: buildMetric(currentSnapshot.weekendAverage, previousSnapshot.weekendAverage),
     avgIntervalMs: buildMetric(currentSnapshot.avgIntervalMs, previousSnapshot.avgIntervalMs),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Resumo mensal
+// ---------------------------------------------------------------------------
+
+export interface DayCount {
+  date: string; // yyyy-MM-dd
+  count: number;
+}
+
+export interface MonthSummary {
+  monthKey: string;
+  /** Mês-calendário completo (não é truncado em "hoje"). */
+  range: DateRange;
+  /** true quando `now` cai dentro do mês, ou seja, o mês ainda não fechou. */
+  inProgress: boolean;
+  totalRecords: number;
+  /** Dias-calendário já decorridos do mês que satisfazem o filtro de dias. */
+  calendarDays: number;
+  daysWithRecords: number;
+  daysWithoutRecords: number;
+  avgPerCalendarDay: number;
+  avgPerActiveDay: number;
+  weekdayAverage: number;
+  weekendAverage: number;
+  busiestDay: DayCount | null;
+  avgIntervalMs: number;
+  longestGapMs: number | null;
+  topActivity: NameCount | null;
+  topType: NameCount | null;
+}
+
+function countRecordsPerDay(records: SmokingRecord[]): DayCount[] {
+  const map = new Map<string, number>();
+  records.forEach(r => {
+    const key = format(new Date(r.dateTime), 'yyyy-MM-dd');
+    map.set(key, (map.get(key) || 0) + 1);
+  });
+  return Array.from(map.entries()).map(([date, count]) => ({ date, count }));
+}
+
+/**
+ * Resumo de um mês-calendário. Respeita o filtro de dias (assim as médias e a
+ * contagem de dias falam do mesmo subconjunto), exceto as médias por tipo de dia,
+ * que — como em AveragesPanel — sempre usam o mês inteiro para não zerar um dos lados.
+ * Meses em andamento consideram só os dias já decorridos.
+ */
+export function computeMonthSummary(records: SmokingRecord[], monthKey: string, daysFilter: filterDays, now: Date = new Date()): MonthSummary {
+  const range = getMonthRange(monthKey);
+  const monthRecords = filterRecordsInRange(records, range, daysFilter);
+  const monthRecordsAllDays = filterRecordsInRange(records, range, filterDays.TOTAL);
+
+  const nowMs = now.getTime();
+  const inProgress = nowMs >= range.start.getTime() && nowMs <= range.end.getTime();
+  const elapsedEnd = nowMs < range.end.getTime() ? endOfDay(now) : range.end;
+  const calendarDays = elapsedEnd.getTime() < range.start.getTime()
+    ? 0 // mês inteiramente no futuro
+    : countCalendarDays({ start: range.start, end: elapsedEnd }, daysFilter);
+
+  const perDay = countRecordsPerDay(monthRecords);
+  const daysWithRecords = perDay.length;
+  const busiestDay = perDay.reduce<DayCount | null>(
+    (best, day) => (!best || day.count > best.count ? day : best),
+    null
+  );
+
+  const dowCounts = getAccurateDayOfWeekCounts(monthRecordsAllDays);
+  const weekendTotal = dowCounts[0].total + dowCounts[6].total;
+  const weekendDays = dowCounts[0].distinctDays + dowCounts[6].distinctDays;
+  const weekdayTotal = dowCounts.slice(1, 6).reduce((s, c) => s + c.total, 0);
+  const weekdayDays = dowCounts.slice(1, 6).reduce((s, c) => s + c.distinctDays, 0);
+
+  const intervals = computeIntervalsMs(monthRecords);
+  const longestGap = findLongestGap(monthRecords);
+
+  return {
+    monthKey,
+    range,
+    inProgress,
+    totalRecords: monthRecords.length,
+    calendarDays,
+    daysWithRecords,
+    daysWithoutRecords: Math.max(0, calendarDays - daysWithRecords),
+    avgPerCalendarDay: calendarDays > 0 ? monthRecords.length / calendarDays : 0,
+    avgPerActiveDay: daysWithRecords > 0 ? monthRecords.length / daysWithRecords : 0,
+    weekdayAverage: weekdayDays > 0 ? weekdayTotal / weekdayDays : 0,
+    weekendAverage: weekendDays > 0 ? weekendTotal / weekendDays : 0,
+    busiestDay,
+    avgIntervalMs: intervals.length > 0 ? intervals.reduce((s, v) => s + v, 0) / intervals.length : 0,
+    longestGapMs: longestGap ? longestGap.ms : null,
+    topActivity: buildActivityData(monthRecords)[0] || null,
+    topType: buildTypeData(monthRecords)[0] || null,
   };
 }
 

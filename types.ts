@@ -26,6 +26,22 @@ export enum FilterRange {
   TOTAL = 'Total'
 }
 
+/** Como o recorte temporal da tela de Análise é escolhido: período relativo (últimos N dias) ou mês-calendário. */
+export enum AnalysisMode {
+  PERIOD = 'periodo',
+  MONTH = 'mes',
+}
+
+/** `month` é uma chave `yyyy-MM` (ver util/months.ts). */
+export type AnalysisSelection =
+  | { mode: AnalysisMode.PERIOD; periodo: FilterRange }
+  | { mode: AnalysisMode.MONTH; month: string };
+
+export interface DateRange {
+  start: Date;
+  end: Date;
+}
+
 export enum filterStrategies {
   TOTAL = 'Total',
   AVERAGE = 'Média',

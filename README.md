@@ -14,6 +14,8 @@
 
 
 Todo:
+ver dias passados na tela inicial
+o grafico ficar mais linear
 
 prioridade:
 - tempo medio entre fumo
