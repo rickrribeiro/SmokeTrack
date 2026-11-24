@@ -14,6 +14,8 @@ export interface AppData {
   smokingTypes: string[];
   activities: string[];
   notes: string[];
+  /** Momentos (ISO) em que o usuário segurou a vontade na tela de abertura. Opcional para manter compatibilidade com dados antigos. */
+  resistedUrges?: string[];
 }
 
 export enum FilterRange {

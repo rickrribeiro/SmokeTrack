@@ -23,6 +23,13 @@ export function normalizeAppData(raw: unknown): AppData {
     notes: Array.isArray(source.notes) ? source.notes : INITIAL_NOTES,
   };
 
+  // Campo opcional: só é mantido se existir; descarta entradas que não sejam datas válidas.
+  if (Array.isArray(source.resistedUrges)) {
+    data.resistedUrges = source.resistedUrges.filter(
+      (d): d is string => typeof d === 'string' && !isNaN(new Date(d).getTime())
+    );
+  }
+
   if (data.records.length > 0) {
     // normaliza/valida in-place; lança erro (string) se algum record estiver malformado
     validateRecords(data);
