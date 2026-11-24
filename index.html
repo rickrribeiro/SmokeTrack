@@ -23,6 +23,25 @@
             background: #e2e8f0;
             border-radius: 10px;
         }
+        /* Tela de abertura (SplashScreen) */
+        @keyframes splash-in {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes splash-out {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(1.04); }
+        }
+        @keyframes splash-rise {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .splash-in { animation: splash-in 350ms ease-out both; }
+        .splash-out { animation: splash-out 250ms ease-in both; }
+        .splash-rise { animation: splash-rise 500ms ease-out both; }
+        @media (prefers-reduced-motion: reduce) {
+            .splash-in, .splash-out, .splash-rise { animation: none; }
+        }
     </style>
 <script type="importmap">
 {
