@@ -1,16 +1,47 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AppData, SmokingRecord } from './types';
 import { storageService } from './services/storageService';
 import TabBar from './components/TabBar';
 import RegisterScreen from './components/RegisterScreen';
 import AnalysisScreen from './components/AnalysisScreen';
 import SettingsScreen from './components/SettingsScreen';
+import SplashScreen from './components/SplashScreen';
 import { Cigarette } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'register' | 'analysis' | 'settings'>('register');
   const [data, setData] = useState<AppData>(storageService.loadData());
+  // Tela de abertura: aparece ao abrir o app e sempre que ele volta do segundo plano.
+  const [showSplash, setShowSplash] = useState(true);
+  const [splashKey, setSplashKey] = useState(0);
+  const showSplashRef = useRef(showSplash);
+  showSplashRef.current = showSplash;
+
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && !showSplashRef.current) {
+        setSplashKey(k => k + 1); // nova montagem = nova mensagem sorteada
+        setShowSplash(true);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, []);
+
+  const resistUrge = useCallback(() => {
+    setData(prev => ({
+      ...prev,
+      resistedUrges: [...(prev.resistedUrges || []), new Date().toISOString()]
+    }));
+  }, []);
+
+  const closeSplash = useCallback(() => setShowSplash(false), []);
+
+  const confirmSmoke = useCallback(() => {
+    setActiveTab('register');
+    setShowSplash(false);
+  }, []);
 
   useEffect(() => {
     storageService.saveData(data);
@@ -43,6 +74,9 @@ const App: React.FC = () => {
     newData.smokingTypes = Array.from(new Set([...newData.smokingTypes, ...importedData.smokingTypes || []]));
     newData.activities = Array.from(new Set([...newData.activities, ...importedData.activities || []]));
     newData.notes = Array.from(new Set([...newData.notes, ...importedData.notes || []]));
+    if (newData.resistedUrges || importedData.resistedUrges) {
+      newData.resistedUrges = Array.from(new Set([...newData.resistedUrges || [], ...importedData.resistedUrges || []]));
+    }
     setData(newData);
   }, [data]);
 
@@ -94,6 +128,17 @@ const App: React.FC = () => {
       </main>
 
       <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      {showSplash && (
+        <SplashScreen
+          key={splashKey}
+          records={data.records}
+          resistedUrges={data.resistedUrges || []}
+          onResist={resistUrge}
+          onClose={closeSplash}
+          onConfirmSmoke={confirmSmoke}
+        />
+      )}
     </div>
   );
 };
