@@ -227,7 +227,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ data, onImport, onUpdat
         </div>
       )}
 
-      <p className="text-center text-[10px] text-slate-300 pb-2">v1.21</p>
+      <p className="text-center text-[10px] text-slate-300 pb-2">v1.22</p>
 
       <Modal isOpen={isAddingType} onClose={() => setIsAddingType(false)} title="Novo Tipo de Fumo">
         <div className="space-y-4">
