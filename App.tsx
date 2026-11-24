@@ -115,7 +115,7 @@ const App: React.FC = () => {
         )}
         
         {activeTab === 'analysis' && (
-          <AnalysisScreen records={data.records} />
+          <AnalysisScreen records={data.records} resistedUrges={data.resistedUrges || []} />
         )}
 
         {activeTab === 'settings' && (

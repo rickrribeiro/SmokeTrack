@@ -7,6 +7,8 @@ import { useFilteredRecords } from './analysis/useFilteredRecords';
 import MonthSummaryCard from './analysis/MonthSummaryCard';
 import AveragesPanel from './analysis/AveragesPanel';
 import DailyTrendCard from './analysis/DailyTrendCard';
+import ResistedDailyCard from './analysis/ResistedDailyCard';
+import { computeResistedSummary } from '../util/resisted';
 import DayOfWeekCard from './analysis/DayOfWeekCard';
 import HourlyCard from './analysis/HourlyCard';
 import ActivityCard from './analysis/ActivityCard';
@@ -23,11 +25,12 @@ import DayTimeline from './analysis/DayTimeline';
 
 interface AnalysisScreenProps {
   records: SmokingRecord[];
+  resistedUrges: string[];
 }
 
 const SELECT_CLASS = 'w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none';
 
-const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
+const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records, resistedUrges }) => {
   const [mode, setMode] = useState<AnalysisMode>(AnalysisMode.PERIOD);
   const [periodo, setPeriodo] = useState<FilterRange>(FilterRange.DAYS_7);
   const [daysFilter, setDaysFilter] = useState<filterDays>(filterDays.TOTAL);
@@ -46,6 +49,10 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
   );
 
   const { filteredRecords, periodOnlyRecords } = useFilteredRecords(records, selection, daysFilter);
+  const resisted = useMemo(
+    () => computeResistedSummary(resistedUrges, selection, daysFilter),
+    [resistedUrges, selection, daysFilter]
+  );
 
   return (
     <div className="flex flex-col gap-6 pb-24">
@@ -111,8 +118,9 @@ const AnalysisScreen: React.FC<AnalysisScreenProps> = ({ records }) => {
         {mode === AnalysisMode.MONTH && (
           <MonthSummaryCard records={records} monthKey={selectedMonth} daysFilter={daysFilter} />
         )}
-        <AveragesPanel filteredRecords={filteredRecords} periodOnlyRecords={periodOnlyRecords} />
+        <AveragesPanel filteredRecords={filteredRecords} periodOnlyRecords={periodOnlyRecords} resisted={resisted} />
         <DailyTrendCard filteredRecords={filteredRecords} />
+        <ResistedDailyCard daily={resisted.daily} />
         <IntervalsPanel filteredRecords={filteredRecords} />
         <LongestGapCard filteredRecords={filteredRecords} />
         <DayOfWeekCard filteredRecords={filteredRecords} strategyFilter={strategyFilter} />
